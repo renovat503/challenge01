@@ -13,6 +13,7 @@ class App extends React.Component{
     this.setState({value: e.target.value});
 
   }
+
   handleCount = (letter) =>{
     const array = this.state.value;
     let sum = 0;
@@ -30,30 +31,71 @@ class App extends React.Component{
 
   render (){
 
-    const arr = this.state.value;
-    const unique = [...new Set(arr)]
+
+     
+     const array = this.state.value;
+     const uniqueLetters = [...new Set(array)];
+ 
+     let result = [];
+     let classes = 'badge bg-primary rounded-pill';
+ 
+     for(let letter of uniqueLetters){
+ 
+       let container = {
+         letter : letter,
+         count : 0
+       }
+ 
+           for(let i = 0;i <= array.length;i++){
+ 
+             if(letter === array[i]){
+               container.count+=1;
+             }
+         }
+ 
+       result.push(container);
+       
+     }
+ 
+     
+ 
+           const sorted = result.sort((a, b) => {
+             return b.count - a.count;
+         });
+
+         const topFive = sorted.slice(0,5);
+         const rest = sorted.slice(5);
 
   return (
     <main>
 
-      <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-          <span class="navbar-brand mb-0 h1">Foldscope Challenge</span>
+      <nav className="navbar navbar-light bg-light">
+        <div className="container-fluid">
+          <span className="navbar-brand mb-0 h1">My tool v1.0</span>
         </div>
       </nav>
-      <div class="mb-3 divOne">
+      <div className="mb-3 divOne">
         <label for="exampleFormControlTextarea1" class="form-label labelOne">Type Something bellow</label>
-        <textarea onChange={this.handleChange} value = {this.state.value} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <textarea onChange={this.handleChange} value = {this.state.value} className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     </div>
 
-      <ol class="list-group list-group-numbered listOne">
+      <ol className="list-group list-group-numbered listOne">
 
-      {unique.map((letter) =>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="ms-2 me-auto">
-          <div class="fw-bold">{letter}</div>
+      {topFive.map((letter) =>
+        <li className="list-group-item list-group-item-info border d-flex justify-content-between align-items-start">
+        <div className="ms-2 me-auto">
+          <div className="fw-bold">{letter.letter}</div>
         </div>
-        <span class="badge bg-primary rounded-pill">{this.handleCount(letter)}</span>
+        <span className='badge bg-info rounded-pill'>{this.handleCount(letter.letter)}</span>
+      </li>
+      )}
+
+      {rest.map((letter) =>
+        <li className="list-group-item d-flex justify-content-between align-items-start">
+        <div className="ms-2 me-auto">
+          <div className="fw-bold">{letter.letter}</div>
+        </div>
+        <span className="badge bg-info rounded-pill">{this.handleCount(letter.letter)}</span>
       </li>
       )}
 
